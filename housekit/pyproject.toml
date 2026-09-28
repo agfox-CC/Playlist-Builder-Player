@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "housekit"
+version = "0.1.0"
+description = "Builds venue house-music playlists (doors, set breaks, load-out) from a local library and a band setlist."
+requires-python = ">=3.11"
+dependencies = [
+    "mutagen==1.47.0",
+    "numpy>=1.26,<3",
+    "pyloudnorm==0.1.1",
+    "rapidfuzz>=3.9,<4",
+    "pdfplumber>=0.11,<0.12",
+    "typer>=0.12,<1",
+    "rich>=13.7,<15",
+    "tomli-w>=1.0,<2",
+    "sounddevice>=0.5,<1",
+    "sv-ttk>=2.6,<3",
+    "tkinterdnd2>=0.4,<1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+build = ["pyinstaller>=6.6"]
+
+[project.scripts]
+housekit = "housekit.cli:app"
+housekit-gui = "housekit.app:main"
+housekit-player = "housekit.player_app:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["housekit*"]
+
+[tool.setuptools.package-data]
+housekit = ["data/*.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

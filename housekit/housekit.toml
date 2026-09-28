@@ -1,0 +1,121 @@
+# housekit configuration. Relative paths are relative to this file.
+
+[library]
+# Read-only music roots. housekit never writes inside these.
+roots = ["../FLAC", "../MP3", "../FLAC Vinyl"]
+db = "library.db"
+
+[output]
+# Bare gig names given to `housekit build --out` land under this folder.
+dir = "../gigs"
+# Custom playlists (`housekit playlist "Name" ...`) land under this folder.
+playlists = "../playlists"
+# Converted audio (`housekit convert ...` / the Convert tab) lands under this folder.
+converted = "../converted"
+
+[convert]
+# Parallel ffmpeg encodes. 0 = half the CPUs.
+jobs = 0
+# Loudness target used to compute per-track gain in the manifest / plan.txt.
+target_lufs = -16.0
+# Flag a track in plan.txt when it is more than this many LU off the slot median.
+level_flag_lu = 3.0
+
+[analysis]
+# 0 = CPU count minus one.
+jobs = 0
+# Seconds of audio decoded from the middle of each track for energy/loudness.
+excerpt_seconds = 30
+# Bump this to force every track to be re-analyzed on the next `housekit index`.
+version = 4
+
+[setlist]
+# The standing setlist: a file, or a folder holding one file per set (SET 1.docx, SET 2.docx ...).
+# `housekit build` uses this unless --setlist is given. Replace the files when the set changes.
+path = "setlists"
+
+[charts]
+# Billboard Hot 100 history used for popularity. Refreshed automatically when the app opens
+# and the data is older than auto_update_days (0 = never refresh automatically).
+url = "https://raw.githubusercontent.com/utdata/rwd-billboard-data/main/data-out/hot-100-current.csv"
+file = "charts/hot-100-current.csv"
+auto_update_days = 7
+
+[matching]
+# 0-100. Setlist lines scoring below this are reported as unresolved (never dropped).
+threshold = 80
+overrides = "setlist_overrides.toml"
+
+[history]
+# Songs used at the last N gigs are excluded from a new build. 0 disables.
+exclude_last = 3
+
+[build]
+# Family-safe default: excludes explicit AND unknown-rating tracks. Override per build with --clean / --no-clean.
+clean = false
+# In clean mode, unknown-rating tracks are excluded... except non-hip-hop tracks tagged with a
+# year before this one, which are trusted as clean. Set to 0 to exclude every unknown.
+clean_trust_before_year = 1985
+allow_holiday = false
+# Only use songs that peaked at this Hot 100 position or better (0 = off). Needs chart data:
+# `housekit charts import <csv>`. Override per build with --top N.
+top = 0
+holiday_months = [12]
+# Slot fill tolerance: runtime must land within this many seconds of the slot target.
+tolerance_seconds = 60
+# Tracks longer than this are never used (hard to fit and boring over a PA).
+max_track_minutes = 7.0
+# Anything shorter is treated as junk (interludes, skits).
+min_track_seconds = 90
+artist_cap_slot = 1
+artist_cap_night = 2
+album_cap_slot = 1
+
+# Slots, in playback order. energy = [min, max] on the 0-1 energy score.
+# Minutes are deliberately about four times the real windows (45/20/20/30) so each folder holds
+# plenty of spare songs. Override per gig with --doors/--break1/--break2/--post.
+[[slots]]
+name = "01_Doors"
+minutes = 180
+energy = [0.25, 0.50]
+
+[[slots]]
+name = "02_Break1"
+minutes = 80
+energy = [0.45, 0.65]
+
+[[slots]]
+name = "03_Break2"
+minutes = 80
+energy = [0.55, 0.80]
+
+[[slots]]
+name = "04_PostShow"
+minutes = 120
+energy = [0.25, 0.50]
+
+[scoring]
+# Small random bump (0..jitter) so two builds from the same setlist don't pick identical tracks.
+jitter = 0.05
+# How far outside a slot's energy band a track can be before its energy fit hits zero
+# (and it is dropped from that slot entirely).
+energy_falloff = 0.20
+
+[scoring.weights]
+energy = 0.35       # fit against the slot's energy band
+era = 0.20          # fit against the setlist's decade mix
+genre = 0.20        # fit against the setlist's genre mix
+familiarity = 0.25  # chart peak/weeks once `housekit charts import` has run; otherwise copies owned + compilation hints
+
+[scoring.penalties]
+# Multipliers applied to the score.
+live = 0.6
+instrumental = 0.7
+alt_version = 0.85      # acoustic / demo / remix / alternate-take versions
+low_tag_confidence = 0.9
+unanalyzed = 0.9
+
+# Uncomment to point at your own edited copies of the rule files.
+# [data_files]
+# genres = "genres.toml"
+# content_rules = "content_rules.toml"

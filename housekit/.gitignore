@@ -1,0 +1,28 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+
+# Build outputs (build_portable.ps1 writes outside the repo; PyInstaller leftovers live here)
+build/
+dist/
+
+# Data that belongs to one machine: the catalog, its exports, the chart CSVs (housekit charts
+# fetch / load), the theme preference, and gig / playlist output
+library.db
+library.db-wal
+library.db-shm
+library.db-journal
+library.csv
+charts/*.csv
+ui.json
+gigs/
+playlists/
+*.log
+
+# The band's own set sheets and their pins (the sample sheets stay tracked)
+SetLists/*.docx
+SetLists/*.pdf
+setlist_overrides.toml

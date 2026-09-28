@@ -1,0 +1,9 @@
+# Only the app is tracked. Everything else in this folder is data: the music library (never
+# touched by git), the packaged portable builds, and the gig / playlist output folders.
+/*
+!/.gitignore
+!/README.md
+!/CLAUDE.md
+!/housekit.cmd
+!/housekit/
+!/.gitattributes

@@ -1,0 +1,315 @@
+# Content-flag rules. All patterns are case-insensitive regexes.
+# Edit freely; changes take effect on the next `housekit index --rescan`.
+# Hand corrections made with `housekit flag` always win over these rules.
+
+[junk]
+# Tested against the title (with the version suffix still attached).
+title_patterns = [
+  "^\\s*(intro|outro|interlude|prelude|prologue|epilogue|skit|segue)\\b",
+  "\\b(intro|outro|interlude|skit)\\s*$",
+  "\\((intro|outro|interlude|skit|dialogue|spoken)\\)",
+  "\\b(dj drop|drop|jingle|station id|sound ?check|tuning|applause|crowd noise|silence|hidden track|untitled)\\b",
+  "\\b(karaoke|backing track|instrumental version|minus one)\\b",
+  "\\b(comedy|stand.?up|monologue|sketch)\\b",
+  "\\b(commentary|interview|voicemail|voice mail|answering machine)\\b",
+  "\\btrack \\d+$",
+  "^\\s*\\d+\\s*$",
+]
+# Tested against the raw genre tag.
+genre_patterns = [
+  "comedy", "spoken", "audiobook", "podcast", "sound ?effect", "karaoke", "meditation", "sleep", "white noise",
+]
+# Tested against the album title.
+album_patterns = [
+  "karaoke", "backing tracks", "sound effects", "comedy",
+]
+
+[holiday]
+title_patterns = [
+  "christmas", "xmas", "x-mas", "santa", "jingle bell", "noel", "silent night", "winter wonderland",
+  "feliz navidad", "hanukkah|chanukah", "kwanzaa", "little drummer boy", "rudolph", "frosty the snowman",
+  "let it snow", "sleigh", "mistletoe", "deck the halls", "o holy night", "silver bells", "auld lang syne",
+  "wonderful christmastime", "last christmas", "all i want for christmas", "blue christmas", "happy holiday",
+  "twelve days", "12 days", "carol of the bells", "the chipmunk song", "new year'?s",
+]
+album_patterns = [
+  "christmas", "xmas", "holiday", "noel", "winter", "yule",
+]
+genre_patterns = [
+  "christmas", "holiday", "xmas", "seasonal",
+]
+
+[live]
+# Matched against title, version suffix, and album.
+patterns = [
+  "\\blive\\b", "unplugged", "in concert", "live at", "live from", "live in", "\\bbootleg\\b",
+  "mtv unplugged", "\\bconcert\\b", "\\bat the bbc\\b", "live session",
+]
+genre_patterns = ["live"]
+
+[instrumental]
+patterns = [
+  "instrumental", "karaoke", "\\bkaraoke\\b", "backing track",
+]
+genre_patterns = ["instrumental", "karaoke"]
+
+[explicit]
+# Marker patterns tested against title and album. A match forces explicit=true.
+patterns = ["\\[explicit\\]", "\\(explicit\\)", "explicit version", "\\bexplicit\\b"]
+# Marker patterns that force explicit=false (only when no explicit marker hit first).
+clean_patterns = ["\\[clean\\]", "\\(clean\\)", "clean version", "radio edit", "clean edit"]
+
+# Override list: artist + title pairs that are explicit regardless of tags.
+# Titles here are compared after normalization (case, punctuation, apostrophes ignored),
+# so "F**k You" and "Fuck You" both hit the same entry. Add your own as you find them.
+[[explicit.known]]
+artist = "Cee Lo Green"
+title = "Fuck You"
+
+[[explicit.known]]
+artist = "Cee Lo Green"
+title = "F**k You"
+
+[[explicit.known]]
+artist = "Eamon"
+title = "Fuck It (I Don't Want You Back)"
+
+[[explicit.known]]
+artist = "Lily Allen"
+title = "Fuck You"
+
+[[explicit.known]]
+artist = "Green Day"
+title = "Longview"
+
+[[explicit.known]]
+artist = "Buckcherry"
+title = "Crazy Bitch"
+
+[[explicit.known]]
+artist = "Kid Rock"
+title = "Bawitdaba"
+
+[[explicit.known]]
+artist = "Eminem"
+title = "The Real Slim Shady"
+
+[[explicit.known]]
+artist = "Eminem"
+title = "Lose Yourself"
+
+[[explicit.known]]
+artist = "Dr. Dre"
+title = "Nuthin' but a 'G' Thang"
+
+[[explicit.known]]
+artist = "Snoop Dogg"
+title = "Gin and Juice"
+
+[[explicit.known]]
+artist = "Cardi B"
+title = "WAP"
+
+[[explicit.known]]
+artist = "Cardi B"
+title = "Bodak Yellow"
+
+[[explicit.known]]
+artist = "Lizzo"
+title = "Truth Hurts"
+
+[[explicit.known]]
+artist = "Olivia Rodrigo"
+title = "drivers license"
+
+[[explicit.known]]
+artist = "Olivia Rodrigo"
+title = "good 4 u"
+
+[[explicit.known]]
+artist = "Post Malone"
+title = "rockstar"
+
+[[explicit.known]]
+artist = "Post Malone"
+title = "Congratulations"
+
+[[explicit.known]]
+artist = "Doja Cat"
+title = "Say So"
+
+[[explicit.known]]
+artist = "Ariana Grande"
+title = "7 rings"
+
+[[explicit.known]]
+artist = "Ariana Grande"
+title = "thank u, next"
+
+[[explicit.known]]
+artist = "Kanye West"
+title = "Gold Digger"
+
+[[explicit.known]]
+artist = "Kanye West"
+title = "Stronger"
+
+[[explicit.known]]
+artist = "Jay-Z"
+title = "99 Problems"
+
+[[explicit.known]]
+artist = "Jay-Z"
+title = "Empire State of Mind"
+
+[[explicit.known]]
+artist = "OutKast"
+title = "Ms. Jackson"
+
+[[explicit.known]]
+artist = "Ludacris"
+title = "Move Bitch"
+
+[[explicit.known]]
+artist = "50 Cent"
+title = "In da Club"
+
+[[explicit.known]]
+artist = "Nelly"
+title = "Hot in Herre"
+
+[[explicit.known]]
+artist = "Ying Yang Twins"
+title = "Wait (The Whisper Song)"
+
+[[explicit.known]]
+artist = "Khia"
+title = "My Neck, My Back"
+
+[[explicit.known]]
+artist = "Akinyele"
+title = "Put It in Your Mouth"
+
+[[explicit.known]]
+artist = "Prince"
+title = "Darling Nikki"
+
+[[explicit.known]]
+artist = "Nine Inch Nails"
+title = "Closer"
+
+[[explicit.known]]
+artist = "Rage Against the Machine"
+title = "Killing in the Name"
+
+[[explicit.known]]
+artist = "Blink-182"
+title = "What's My Age Again?"
+
+[[explicit.known]]
+artist = "Blink-182"
+title = "Family Reunion"
+
+[[explicit.known]]
+artist = "Sublime"
+title = "Wrong Way"
+
+[[explicit.known]]
+artist = "Sublime"
+title = "Caress Me Down"
+
+[[explicit.known]]
+artist = "The Offspring"
+title = "Bad Habit"
+
+[[explicit.known]]
+artist = "Alanis Morissette"
+title = "You Oughta Know"
+
+[[explicit.known]]
+artist = "Pink"
+title = "Fuckin' Perfect"
+
+[[explicit.known]]
+artist = "P!nk"
+title = "F**kin' Perfect"
+
+[[explicit.known]]
+artist = "Britney Spears"
+title = "If U Seek Amy"
+
+[[explicit.known]]
+artist = "Bruno Mars"
+title = "Gorilla"
+
+[[explicit.known]]
+artist = "Dua Lipa"
+title = "IDGAF"
+
+[[explicit.known]]
+artist = "Taylor Swift"
+title = "Vigilante Shit"
+
+[[explicit.known]]
+artist = "Morgan Wallen"
+title = "Last Night"
+
+[[explicit.known]]
+artist = "Morgan Wallen"
+title = "Whiskey Glasses"
+
+[[explicit.known]]
+artist = "Toby Keith"
+title = "Beer for My Horses"
+
+[[explicit.known]]
+artist = "Toby Keith"
+title = "Red Solo Cup"
+
+[[explicit.known]]
+artist = "Brad Paisley"
+title = "Alcohol"
+
+[[explicit.known]]
+artist = "Big & Rich"
+title = "Save a Horse (Ride a Cowboy)"
+
+[[explicit.known]]
+artist = "Afroman"
+title = "Because I Got High"
+
+[[explicit.known]]
+artist = "Kid Rock"
+title = "Cowboy"
+
+[[explicit.known]]
+artist = "Salt-N-Pepa"
+title = "Push It"
+
+[[explicit.known]]
+artist = "Sir Mix-A-Lot"
+title = "Baby Got Back"
+
+[[explicit.known]]
+artist = "Tone Loc"
+title = "Wild Thing"
+
+[[explicit.known]]
+artist = "Tone Loc"
+title = "Funky Cold Medina"
+
+[[explicit.known]]
+artist = "Ice Cube"
+title = "It Was a Good Day"
+
+[[explicit.known]]
+artist = "N.W.A"
+title = "Straight Outta Compton"
+
+[[explicit.known]]
+artist = "2 Live Crew"
+title = "Me So Horny"
+
+[[explicit.known]]
+artist = "The Rolling Stones"
+title = "Star Star"

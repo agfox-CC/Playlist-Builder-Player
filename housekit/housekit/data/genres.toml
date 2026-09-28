@@ -1,0 +1,130 @@
+# Genre normalization. Raw genre tags are tested against these rules in order;
+# the first matching rule wins. `pattern` is a case-insensitive regex tested
+# against the raw genre string. Optional `min_year` / `max_year` restrict a rule
+# to tracks whose year falls in that range (tracks with no year skip year-gated rules).
+# Note: tag years are often the remaster/compilation year, so year rules are used
+# sparingly and only where the two candidate genres are close cousins anyway.
+#
+# Controlled vocabulary:
+#   Classic Rock, Southern Rock, Pop, Dance, Country, Modern Country,
+#   R&B/Soul, Motown, Funk, Hip-Hop, Yacht Rock, Alternative, Blues, Other
+
+vocabulary = [
+  "Classic Rock", "Southern Rock", "Pop", "Dance", "Country", "Modern Country",
+  "R&B/Soul", "Motown", "Funk", "Hip-Hop", "Yacht Rock", "Alternative", "Blues", "Other",
+]
+
+# --- specific tags first ---------------------------------------------------
+
+[[rule]]
+pattern = "southern"
+genre = "Southern Rock"
+
+[[rule]]
+pattern = "yacht|soft rock|adult contemporary|\\bAOR\\b|west coast"
+genre = "Yacht Rock"
+
+[[rule]]
+pattern = "motown"
+genre = "Motown"
+
+[[rule]]
+pattern = "funk|disco"
+genre = "Funk"
+
+[[rule]]
+pattern = "hip.?hop|\\brap\\b|trap|grime"
+genre = "Hip-Hop"
+
+[[rule]]
+pattern = "r&b|r and b|rnb|rhythm and blues|rhythm & blues|\\bsoul\\b|neo.?soul|gospel"
+genre = "R&B/Soul"
+
+[[rule]]
+pattern = "blues"
+genre = "Blues"
+
+# Country-rock (Eagles, Poco) is rock for our purposes, not country.
+[[rule]]
+pattern = "country.?rock|heartland|roots rock"
+genre = "Classic Rock"
+
+[[rule]]
+pattern = "country|americana|bluegrass|red dirt|texas country|honky"
+genre = "Modern Country"
+min_year = 2000
+
+[[rule]]
+pattern = "country|americana|bluegrass|red dirt|texas country|honky|outlaw"
+genre = "Country"
+
+[[rule]]
+pattern = "dance|house|\\bedm\\b|electronic|electro|techno|club|eurodance|trance|synthpop|synth.?pop"
+genre = "Dance"
+
+# Specific rock flavours before the generic "pop" rule so "Pop, Rock, Hard Rock" lands here.
+[[rule]]
+pattern = "classic rock|arena rock|hard rock|glam|album rock|prog|psychedelic|folk rock|rock & roll|rock and roll|rock ?n.? ?roll|rockabilly|jazz rock|blues rock|garage"
+genre = "Classic Rock"
+
+[[rule]]
+pattern = "alternative|indie|grunge|punk|\\bemo\\b|post.?rock|shoegaze|new wave|britpop|modern rock|nu.?metal|metal|industrial|post.?grunge"
+genre = "Alternative"
+
+[[rule]]
+pattern = "\\bpop\\b"
+genre = "Pop"
+
+# Generic "Rock". Year split kept only as a weak hint (Classic Rock <-> Alternative similarity is 0.45).
+[[rule]]
+pattern = "\\brock\\b"
+genre = "Alternative"
+min_year = 2005
+
+[[rule]]
+pattern = "\\brock\\b|oldies|doo.?wop|surf|singer"
+genre = "Classic Rock"
+
+[[rule]]
+pattern = "reggae|ska|latin|world|jazz|folk|easy listening|lounge|classical|classique|soundtrack|acoustic"
+genre = "Other"
+
+# Similarity between vocabulary genres, used when scoring a track's genre against
+# the setlist's genre distribution. Symmetric; a genre always matches itself at 1.0.
+# Unlisted pairs score 0.
+[similarity]
+"Classic Rock|Southern Rock" = 0.75
+"Classic Rock|Yacht Rock" = 0.6
+"Classic Rock|Blues" = 0.5
+"Classic Rock|Alternative" = 0.45
+"Classic Rock|Country" = 0.35
+"Classic Rock|Pop" = 0.35
+"Southern Rock|Country" = 0.6
+"Southern Rock|Blues" = 0.5
+"Country|Modern Country" = 0.8
+"Modern Country|Pop" = 0.4
+"Modern Country|Classic Rock" = 0.35
+"Pop|Dance" = 0.7
+"Pop|Yacht Rock" = 0.5
+"Pop|R&B/Soul" = 0.5
+"Pop|Alternative" = 0.4
+"Pop|Hip-Hop" = 0.3
+"Dance|Funk" = 0.6
+"Dance|Hip-Hop" = 0.5
+"Dance|R&B/Soul" = 0.4
+"R&B/Soul|Motown" = 0.85
+"R&B/Soul|Funk" = 0.7
+"R&B/Soul|Hip-Hop" = 0.5
+"Motown|Funk" = 0.6
+"Motown|Pop" = 0.5
+"Funk|Hip-Hop" = 0.5
+"Yacht Rock|R&B/Soul" = 0.4
+"Blues|R&B/Soul" = 0.5
+"Alternative|Modern Country" = 0.2
+"Other|Classic Rock" = 0.3
+"Other|Pop" = 0.3
+"Other|Country" = 0.3
+"Other|Alternative" = 0.3
+"Other|R&B/Soul" = 0.3
+"Other|Dance" = 0.3
+"Other|Modern Country" = 0.3
